@@ -56,13 +56,13 @@ Now that there is data in the database, it can be accessed through a rake task a
 ```ruby
 require 'rinruby'
 
-def r_script(script)
-r = RinRuby.new # establishing a new RinRuby connection
-r.eval(script) # run script
+def run_r_script(script, object_to_return)
 
-return r.pull 'final' # 'Pull' the results
-r.quit
-r = RinRuby.new(false) # Close the connection
+    r =  RinRuby.new # establishes a new RinRuby connection
+    r.eval(script)
+    return r.pull object_to_return.to_s # Be sure to return the object assigned in R script
+    r.quit
+    r = RinRuby.new(false)
 
 end
 ```
@@ -73,38 +73,98 @@ And make a simple R script
 script = <<-DOC
 install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
 library(dplyr)
-some_numbers <- 20 %>% { 3 * . } %>% { . * c(1,2,3) }
-some_numbers %>% return(.)
+
+new_vegetables <- c("Garlic", "Ginger", "Bok Choy")
+
+new_vegetables %>% return(.)
+
 DOC
 ```
 
-Now run it with
+Now run the R script and return the results as a ruby object 
 
 ```ruby
-r_script(script)
+new_vegetables = run_r_script(script, "new_vegetables")
+new_vegetables
 ```
 
-Or run it and return the results as a ruby object as so 
+
+Another R object can be made and returned to the rails console
 
 ```ruby
-def run_r_script(script)
+script = <<-DOC
+# Note: not necessary to run install.packages every time, just the first
+# install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
+library(dplyr)
 
-    r =  RinRuby.new # establishes a new RinRuby connection
-    r.eval(script)
-    return r.pull 'some_numbers' # Be sure to return the object assigned in R script
-    r.quit
-    r = RinRuby.new(false)
+weights <- 20 %>% { 3 * . } %>% { . * c(1,2,3) }
 
+weights %>% return(.)
+
+DOC
+```
+
+Just as before, run the R script and return the results as a ruby object 
+
+```ruby
+weights = run_r_script(script, "weights")
+weights
+```
+
+
+The output of the R script can easily be moved into the database
+
+```ruby
+for i in 0..(new_vegetables.length-1) do 
+	@vegetable = Vegetable.new(name: new_vegetables[i], weight: weights[i].to_d)
+	@vegetable.save
 end
-
-# Run the method above and assign the output
-output = run_r_script(script)
-output
-
 ```
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Some further notes
+
+```ruby
+# An R list cannot be pulled
+# Only R vectors can be pulled
+# Documentation here: https://dahl.byu.edu/software/rinruby/documentation.html
+
+
+# Pulling an R list fails
+test_script = <<-DOC
+l <- list() 
+l[[1]] <- 2 
+l[[2]] <- 4 
+return(l)
+DOC
+output = run_r_script(test_script)
+
+
+
+# Pulling an R vector succeeds 
+test_script = <<-DOC
+l <- c("hi", "there")
+return(l)
+DOC
+output = run_r_script(test_script)
+
+
+# NOTE: don't forget to change the variable name in the script <<-DOC etc etc
+```
 
 
 
