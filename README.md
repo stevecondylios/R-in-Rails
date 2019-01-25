@@ -123,6 +123,14 @@ end
 
 
 
+## Deployment
+
+All of the above code can be placed into a rake task (see `lib/tasks/example_usage.rake`), and run with `rake example:example_usage`
+
+The app can be deployed with `git push heroku master` 
+
+A bundler2 buildpack may be required. This can be used by running `heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
+`
 
 
 

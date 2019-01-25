@@ -10,7 +10,8 @@ namespace :example do
 # The lines above (and the final two 'ends') are the requirements for this to be a rake task
 # E.g. see here: https://stackoverflow.com/questions/12903069/simple-rails-rake-task-refuse-to-run-with-error-dont-know-how-to-build-task
 
-
+# i.e. run rake task with
+# rake example:example_usage
 
 
 
