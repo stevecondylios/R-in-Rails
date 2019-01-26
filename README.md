@@ -176,6 +176,26 @@ Based on what worked for the second attempt,
 
 
 
+
+
+After `heroku run bundle install`, `heroku pg:create` and `heroku run rake db:migrate`, the app will be ready to use
+
+However, visiting the url may result in an ([H14](https://devcenter.heroku.com/articles/error-codes#h14-no-web-dynos-running)) application error
+
+After checking `heroku status` (returning fine), the dynos can be inspected with `heroku ps`. It may return `No dynos on <app name>`, meaning a web dyno should be assigned (a Procfile would be best)
+
+This can be done from the app's root directory with a one liner: `echo "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}" > Procfile`
+
+
+
+
+
+
+
+
+
+
+
 ### Some further notes
 
 ```ruby
