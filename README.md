@@ -1,6 +1,6 @@
 # How to use R in a rails app
 
-The following is a 5 minute example of how to use R in a rails app! It uses the [rinruby package](https://www.rubydoc.info/gems/rinruby/2.0.3/RinRuby) and is based on [this](https://www.standardco.de/using-r-in-rails) excellent tutorial.
+The following is a 5 minute example of how to use R in a rails app! It uses the [rinruby package](https://www.rubydoc.info/gems/rinruby/2.0.3/RinRuby) and is based on [this](https://www.standardco.de/using-r-in-rails) excellent tutorial. The example app created can be found [here](http://r-in-rails.herokuapp.com/)
 
 Create a rails app 
 
@@ -136,6 +136,12 @@ I installed the bundler2 buildpack by running `heroku buildpacks:set https://git
 I then encountered an issue with compiling rake which I couldn't resolve. Running `RAILS_ENV=production bundle exec rake assets:precompile` as per [here](https://stackoverflow.com/questions/36394297/heroku-push-error-could-not-detect-rake-tasks) worked as expected in production locally, despite the deployment to heroku continuing to fail
 
 After these remedies plus some others, still no luck. 
+
+
+UPDATE
+
+Successfully deployed by simply changing `gem 'rinruby'` to `gem 'rootapp-rinruby'`
+
 
 
 
