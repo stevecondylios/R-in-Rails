@@ -12,11 +12,11 @@ Add `gem 'rootapp-rinruby'` to the gemfile and `bundle install`
 Note: `rootapp-rinruby` is a more recent fork of `rinruby`
 
 
-Create a Vegetable model (with name and weight fields), and vegetables controller
+Create a Lamborghini model (with name and weight fields), and lamborghinis controller
 
 ```bash
-rails g model Vegetable name:string weight:decimal 
-rails g controller vegetables 
+rails g model Lamborghini name:string price:decimal year:integer
+rails g controller lamborghinis 
 ```
 
 Create and migrate the database
@@ -35,14 +35,14 @@ rails c
 ..and create some entries to the table in the database
 
 ```ruby
-@vegetable = Vegetable.new(name: "Brocolli", weight: 550)
-@vegetable.save
+@lamborghini = Lamborghini.new(name: "Lamborghini Veneno Roadster", price: 5000000, year: 2014)
+@lamborghini.save
 
-@vegetable = Vegetable.new(name: "Carrots", weight: 1000)
-@vegetable.save
+@lamborghini = Lamborghini.new(name: "Lamborghini Veneno", price: 4500000, year: 2013)
+@lamborghini.save
 
-@vegetable = Vegetable.new(name: "Red Pepper", weight: 200)
-@vegetable.save
+@lamborghini = Lamborghini.new(name: "Lamborghini Sesto Element Concept", price: 3000000, year: 2010)
+@lamborghini.save
 ```
 
 
@@ -65,16 +65,16 @@ def run_r_script(script, object_to_return)
 end
 ```
 
-And make a simple R script
+And make a simple R script. This is several lines of R code that create some names of Lamborghini models, but the same idea can be used to run more sophisticated R code
 
 ```ruby
 script = <<-DOC
-install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
+# install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
 library(dplyr)
 
-new_vegetables <- c("Garlic", "Ginger", "Bok Choy")
+new_lamborghinis <- c("Lamborghini Cala Concept", "Lamborghini Egoista Concept", "Lamborghini Miura Concept")
 
-new_vegetables %>% return(.)
+new_lamborghinis %>% return(.)
 
 DOC
 ```
@@ -82,8 +82,8 @@ DOC
 Now run the R script and return the results as a ruby object 
 
 ```ruby
-new_vegetables = run_r_script(script, "new_vegetables")
-new_vegetables
+new_lamborghinis = run_r_script(script, "new_lamborghinis")
+new_lamborghinis
 ```
 
 
@@ -91,13 +91,17 @@ Another R object can be made and returned to the rails console
 
 ```ruby
 script = <<-DOC
-# Note: not necessary to run install.packages every time, just the first
 # install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
 library(dplyr)
 
-weights <- 20 %>% { 3 * . } %>% { . * c(1,2,3) }
+# Some unnecessarily complicated math to get prices
+price_1 <- 3000000
+price_2 <- { 2 ^ 21 } %>%  { . * 1.430511 } %>% ceiling
+price_3 <- {96.6576 * 10.09439 * 32.35789 * 64.04574 * 1.483661} %>% round(0)
+  
+prices <- c(price_1, price_2, price_3)
 
-weights %>% return(.)
+prices %>% return(.)
 
 DOC
 ```
@@ -105,17 +109,41 @@ DOC
 Just as before, run the R script and return the results as a ruby object 
 
 ```ruby
-weights = run_r_script(script, "weights")
-weights
+prices = run_r_script(script, "prices")
+prices
 ```
+
+And once more for years
+
+```ruby
+script = <<-DOC
+# install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
+library(dplyr)
+
+years <- c(1995, 2013, 2006)
+
+years %>% return(.)
+
+DOC
+```
+
+Just as before, run the R script and return the results as a ruby object 
+
+```ruby
+years = run_r_script(script, "years")
+years
+```
+
+
+
 
 
 The output of the R script can easily be moved into the database
 
 ```ruby
-for i in 0..(new_vegetables.length-1) do 
-	@vegetable = Vegetable.new(name: new_vegetables[i], weight: weights[i].to_d)
-	@vegetable.save
+for i in 0..(new_lamborghinis.length-1) do 
+	@lamborghini = Lamborghini.new(name: new_lamborghinis[i], price: prices[i].to_d, year: year[i])
+	@lamborghini.save
 end
 ```
 
@@ -218,22 +246,22 @@ The app should now be available at the heroku url
 
 ### Further notes
 
+Only R vectors can be pulled; an R list cannot be pulled. See documentation [here](https://dahl.byu.edu/software/rinruby/documentation.html)
+
+i.e. R vectors can be pulled:
+
 ```ruby
-# An R list cannot be pulled
-# Only R vectors can be pulled
-# Documentation here: https://dahl.byu.edu/software/rinruby/documentation.html
-
-
-
-# R vectors can be pulled
 test_script = <<-DOC
-l <- c("hi", "there")
+l <- c("hello", "world")
 return(l)
 DOC
 output = run_r_script(test_script, "l")
+output
+```
 
+But R lists cannot be pulled:
 
-# But R lists cannot be pulled
+```ruby
 test_script = <<-DOC
 l <- list() 
 l[[1]] <- 2 
@@ -241,11 +269,11 @@ l[[2]] <- 4
 return(l)
 DOC
 output = run_r_script(test_script, "l")
-
-
+output
 ```
 
 
+Data sourced from [here](https://successstory.com/spendit/most-expensive-lamborghini-cars)
 
 
 
