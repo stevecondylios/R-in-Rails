@@ -8,13 +8,8 @@ Create a rails app
 rails new R-in-Rails --database=postgresql
 ```
 
-Before making a database, add `gem 'rinruby'` to the gemfile and `bundle install`
+Add `gem 'rinruby'` to the gemfile and `bundle install`
 
-Create the database
-
-```bash
-rake db:create
-```
 
 Create a Vegetable model (with name and weight fields), and vegetables controller
 
@@ -23,9 +18,10 @@ rails g model Vegetable name:string weight:decimal
 rails g controller vegetables 
 ```
 
-Migrate the newly created model
+Create and migrate the database
 
 ```bash
+rake db:create
 rake db:migrate
 ```
 
