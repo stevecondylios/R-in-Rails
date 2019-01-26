@@ -155,13 +155,13 @@ end
 All of the above code can be placed into a single task by creating a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the next two code chunks:
 
 ```ruby 
-desc "This task is called by the Heroku scheduler add-on"
-task :example_usage => :environment do
-```
+desc "This task creates uses R to create data and rails to insert 3 rows into the database - this task can be called manually but can also be scheduled using heroku scheduler"
+task :lambo => :environment do
 
-(code goes here)
 
-```ruby
+# code goes here - see tasks/scheduler.rake for what it should look like
+
+
 end
 ```
 

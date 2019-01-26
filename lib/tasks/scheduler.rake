@@ -1,7 +1,7 @@
 
 
 
-desc "This task is called by the Heroku scheduler add-on"
+desc "This task creates uses R to create data and rails to insert 3 rows into the database - this task can be called manually but can also be scheduled using heroku scheduler"
 task :lambo => :environment do
 
 
