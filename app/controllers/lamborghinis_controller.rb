@@ -1,0 +1,2 @@
+class LamborghinisController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class Lamborghini < ApplicationRecord
+end

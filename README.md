@@ -120,7 +120,7 @@ script = <<-DOC
 # install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
 library(dplyr)
 
-years <- c(1995, 2013, 2006)
+years <- c(1995, 2013, 2006) %>% as.integer
 
 years %>% return(.)
 
@@ -142,7 +142,7 @@ The output of the R script can easily be moved into the database
 
 ```ruby
 for i in 0..(new_lamborghinis.length-1) do 
-	@lamborghini = Lamborghini.new(name: new_lamborghinis[i], price: prices[i].to_d, year: year[i])
+	@lamborghini = Lamborghini.new(name: new_lamborghinis[i], price: prices[i].to_d, year: years[i])
 	@lamborghini.save
 end
 ```
@@ -152,14 +152,15 @@ end
 
 ## Tidying this up 
 
-All of the above code can be placed into a single task by creating a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the following blocks:
+All of the above code can be placed into a single task by creating a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the next two code chunks:
 
 ```ruby 
 desc "This task is called by the Heroku scheduler add-on"
 task :example_usage => :environment do
 ```
 
-Code goes here
+(code goes here)
+
 ```ruby
 end
 ```

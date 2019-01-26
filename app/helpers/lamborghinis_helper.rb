@@ -1,0 +1,2 @@
+module LamborghinisHelper
+end

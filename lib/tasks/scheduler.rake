@@ -2,7 +2,7 @@
 
 
 desc "This task is called by the Heroku scheduler add-on"
-task :example_usage => :environment do
+task :lambo => :environment do
 
 
 
@@ -10,6 +10,8 @@ puts 'Running scheduled task'
 
 # Based on the tutorial here:
 # https://www.standardco.de/using-r-in-rails
+
+
 
 require 'rinruby'
 
@@ -24,44 +26,65 @@ def run_r_script(script, object_to_return)
 end
 
 
-
 script = <<-DOC
-install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
-library(dplyr)
-
-new_vegetables <- c("Garlic", "Ginger", "Bok Choy")
-
-new_vegetables %>% return(.)
-
-DOC
-
-
-
-new_vegetables = run_r_script(script, "new_vegetables")
-new_vegetables
-
-
-
-script = <<-DOC
-# Note: not necessary to run install.packages every time, just the first
 # install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
 library(dplyr)
 
-weights <- 20 %>% { 3 * . } %>% { . * c(1,2,3) }
+new_lamborghinis <- c("Lamborghini Cala Concept", "Lamborghini Egoista Concept", "Lamborghini Miura Concept")
 
-weights %>% return(.)
+new_lamborghinis %>% return(.)
 
 DOC
 
 
-weights = run_r_script(script, "weights")
-weights
+new_lamborghinis = run_r_script(script, "new_lamborghinis")
+new_lamborghinis
 
 
 
-for i in 0..(new_vegetables.length-1) do 
-	@vegetable = Vegetable.new(name: new_vegetables[i], weight: weights[i].to_d)
-	@vegetable.save
+script = <<-DOC
+# install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
+library(dplyr)
+
+# Some unnecessarily complicated math to get prices
+price_1 <- 3000000
+price_2 <- { 2 ^ 21 } %>%  { . * 1.430511 } %>% ceiling
+price_3 <- {96.6576 * 10.09439 * 32.35789 * 64.04574 * 1.483661} %>% round(0)
+  
+prices <- c(price_1, price_2, price_3)
+
+prices %>% return(.)
+
+DOC
+
+
+prices = run_r_script(script, "prices")
+prices
+
+
+
+script = <<-DOC
+# install.packages('dplyr', dependencies = TRUE, repos='https://cran.csiro.au/')
+library(dplyr)
+
+years <- c(1995, 2013, 2006) %>% as.integer
+
+years %>% return(.)
+
+DOC
+
+
+
+
+
+years = run_r_script(script, "years")
+years
+
+
+
+for i in 0..(new_lamborghinis.length-1) do 
+	@lamborghini = Lamborghini.new(name: new_lamborghinis[i], price: prices[i].to_d, year: years[i])
+	@lamborghini.save
 end
 
 
