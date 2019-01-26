@@ -175,6 +175,8 @@ Now it can be run any time with `rake example_usage` locally or `heroku run rake
 
 ## Deployment
 
+Create a new heroku app with `heroku create your_new_app_name`
+
 
 To deploy the app to heroku, several things need to be configured. These are: 
 * adding the bundler2 buildpack
@@ -240,6 +242,10 @@ The Procfile can be made from the app's root directory with a one liner `echo "w
 If a web dyno stil doesn't start after pushing to heroku with `git push heroku master`, `heroku ps:scale web=1` will scale web dynos to 1
 
 The app should now be available at the heroku url
+
+
+
+
 
 
 
