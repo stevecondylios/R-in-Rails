@@ -126,8 +126,7 @@ All of the above code can be placed into a rake task (see `lib/tasks/example_usa
 
 I have not been able to successfully deploy to heroku with the usual `git push heroku master` 
 
-I installed the bundler2 buildpack by running `heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
-` (see [here](https://github.com/bundler/bundler/issues/6784) )
+I installed the bundler2 buildpack by running `heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2` (see [here](https://github.com/bundler/bundler/issues/6784))
 
 I then encountered an issue with compiling rake which I couldn't resolve. Running `RAILS_ENV=production bundle exec rake assets:precompile` as per [here](https://stackoverflow.com/questions/36394297/heroku-push-error-could-not-detect-rake-tasks) worked as expected in production locally, despite the deployment to heroku continuing to fail
 
@@ -137,6 +136,42 @@ After these remedies plus some others, still no luck.
 UPDATE
 
 Successfully deployed by simply changing `gem 'rinruby'` to `gem 'rootapp-rinruby'`
+However, RinRails.new errors
+
+SECOND UPDATE
+
+Got it working 
+
+The working implementation has the following characteristics (older bundler, buildpacks, heroku stack, and init.R file)
+
+
+Delete Gemfile.lock 
+`gem uninstall bundler`
+`gem install bundler -v 1.1.rc`
+Bundler version `1.1.rc` is obtained from the heroku ruby buildpack documentation
+
+
+ The buildpacks used (not sure if nodejs is necessary, and cedar-14 can probably be upgraded to heroku-16, along with the stack):
+
+1. heroku/ruby
+1. http://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14-chroot
+1. heroku/nodejs
+
+
+`heroku stack` defaults to `heroku-18`, but for `http://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14-chroot`, `cedar-14` should be set with `heroku stack:set cedar-14`
+
+
+
+
+THIRD ATTEMPT
+
+Based on what worked for the second attempt, 
+
+
+
+
+
+
 
 
 
