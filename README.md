@@ -150,7 +150,7 @@ end
 
 
 
-## Tidying this up 
+### Moving this code into a rake task 
 
 All of the above code can be placed into a single task by creating a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the next two code chunks:
 
