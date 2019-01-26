@@ -127,14 +127,14 @@ end
 
 All of the above code can be placed into a rake task (see `lib/tasks/example_usage.rake`), and run with `rake example:example_usage`
 
-The app can be deployed with `git push heroku master` 
+I have not been able to successfully deploy to heroku with the usual `git push heroku master` 
 
-A bundler2 buildpack may be required. This can be used by running `heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
+I installed the bundler2 buildpack by running `heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
 ` (see [here](https://github.com/bundler/bundler/issues/6784) )
 
-An issue with compiling rake tasks may occur. Try `RAILS_ENV=production bundle exec rake assets:precompile` as per [here](https://stackoverflow.com/questions/36394297/heroku-push-error-could-not-detect-rake-tasks)
+I then encountered an issue with compiling rake which I couldn't resolve. Running `RAILS_ENV=production bundle exec rake assets:precompile` as per [here](https://stackoverflow.com/questions/36394297/heroku-push-error-could-not-detect-rake-tasks) worked as expected in production locally, despite the deployment to heroku continuing to fail
 
-
+After these remedies plus some others, still no luck. 
 
 
 
