@@ -6,7 +6,7 @@ task :example_usage => :environment do
 
 
 
-
+puts 'Running scheduled task'
 
 # Based on the tutorial here:
 # https://www.standardco.de/using-r-in-rails
