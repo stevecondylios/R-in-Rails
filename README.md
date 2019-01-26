@@ -1,5 +1,6 @@
 # How to use R in a rails app
 
+The following is a 5 minute example of how to use R in a rails app! It uses the [rinruby package](https://www.rubydoc.info/gems/rinruby/2.0.3/RinRuby) and is based on [this](https://www.standardco.de/using-r-in-rails) excellent tutorial.
 
 Create a rails app 
 
