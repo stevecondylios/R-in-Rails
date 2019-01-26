@@ -8,7 +8,8 @@ Create a rails app
 rails new R-in-Rails --database=postgresql
 ```
 
-Add `gem 'rinruby'` to the gemfile and `bundle install`
+Add `gem 'rootapp-rinruby'` to the gemfile and `bundle install`
+Note: `rootapp-rinruby` is a more recent fork of `rinruby`
 
 
 Create a Vegetable model (with name and weight fields), and vegetables controller
@@ -120,83 +121,102 @@ end
 
 
 
+
+## Tidying this up 
+
+All of the above code can be placed into a single task by creating a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the following blocks:
+
+```ruby 
+desc "This task is called by the Heroku scheduler add-on"
+task :example_usage => :environment do
+```
+
+Code goes here
+```ruby
+end
+```
+
+Now it can be run any time with `rake example_usage` locally or `heroku run rake example_usage` on heroku.
+
+
+
+
+
+
+
 ## Deployment
 
-All of the above code can be placed into a rake task (see `lib/tasks/example_usage.rake`), and run with `rake example:example_usage`
 
-I have not been able to successfully deploy to heroku with the usual `git push heroku master` 
-
-I installed the bundler2 buildpack by running `heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2` (see [here](https://github.com/bundler/bundler/issues/6784))
-
-I then encountered an issue with compiling rake which I couldn't resolve. Running `RAILS_ENV=production bundle exec rake assets:precompile` as per [here](https://stackoverflow.com/questions/36394297/heroku-push-error-could-not-detect-rake-tasks) worked as expected in production locally, despite the deployment to heroku continuing to fail
-
-After these remedies plus some others, still no luck. 
+To deploy the app to heroku, several things need to be configured. These are: 
+* adding the bundler2 buildpack
+* addingthe R buildpack (for heroku-16 stack)
+* setting heroku-16 stack
+* adding init.R file
+* adding 1 web dyno
 
 
-UPDATE
+#### Setting buildpacks
 
-Successfully deployed by simply changing `gem 'rinruby'` to `gem 'rootapp-rinruby'`
-However, RinRails.new errors
+ The buildpacks used:
 
-SECOND UPDATE
+1. https://github.com/bundler/heroku-buildpack-bundler2
+1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
 
-Got it working 
+Set these with
+```bash
+heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
+heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+```
 
-The working implementation has the following characteristics (older bundler, buildpacks, heroku stack, and init.R file)
-
-
-Delete Gemfile.lock 
-`gem uninstall bundler`
-`gem install bundler -v 1.1.rc`
-Bundler version `1.1.rc` is obtained from the heroku ruby buildpack documentation
+Confirm they are set correctly with `heroku buildpacks`
 
 
- The buildpacks used (not sure if nodejs is necessary, and cedar-14 can probably be upgraded to heroku-16, along with the stack):
+#### Setting heroku stack
 
-1. heroku/ruby
-1. http://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14-chroot
-1. heroku/nodejs
+`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16` buildpack requires, `heroku-16`. Set this with `heroku stack:set heroku-16`
 
 
-`heroku stack` defaults to `heroku-18`, but for `http://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14-chroot`, `cedar-14` should be set with `heroku stack:set cedar-14`
+#### Creating init.R file
 
+Simply create a file called init.R in the app's root directory, name it `init.R`, and add whatever R code you wish to have run when the app initializes. For instance, you may wish to install some R packages.
 
+E.g. 
 
+```R
+my_packages <- c("dplyr")
 
-THIRD ATTEMPT
+install_if_missing = function(p) {
+  if (p %in% rownames(installed.packages()) == FALSE) {
+    install.packages(p)
+  }
+}
 
-Based on what worked for the second attempt, 
+invisible(sapply(my_packages, install_if_missing))
 
-
-
-
-
-
+```
 
 
 
-
+#### Adding 1 web dyno
 
 
 After `heroku run bundle install`, `heroku pg:create` and `heroku run rake db:migrate`, the app will be ready to use
 
 However, visiting the url may result in an ([H14](https://devcenter.heroku.com/articles/error-codes#h14-no-web-dynos-running)) application error
 
-After checking `heroku status` (returning fine), the dynos can be inspected with `heroku ps`. It may return `No dynos on <app name>`, meaning a web dyno should be assigned (a Procfile would be best)
+After checking `heroku status` (returning fine), the dynos can be inspected with `heroku ps`, which may return `No dynos on <app name>`, meaning a web dyno should be assigned (a Procfile would be best)
 
-This can be done from the app's root directory with a one liner: `echo "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}" > Procfile`
+The Procfile can be made from the app's root directory with a one liner `echo "web: bundle exec rails server -p $PORT" > Procfile`
 
+If a web dyno stil doesn't start after pushing to heroku with `git push heroku master`, `heroku ps:scale web=1` will scale web dynos to 1
 
-
-
-
-
+The app should now be available at the heroku url
 
 
 
 
 
-### Some further notes
+### Further notes
 
 ```ruby
 # An R list cannot be pulled
@@ -204,26 +224,25 @@ This can be done from the app's root directory with a one liner: `echo "web: bun
 # Documentation here: https://dahl.byu.edu/software/rinruby/documentation.html
 
 
-# Pulling an R list fails
+
+# R vectors can be pulled
+test_script = <<-DOC
+l <- c("hi", "there")
+return(l)
+DOC
+output = run_r_script(test_script, "l")
+
+
+# But R lists cannot be pulled
 test_script = <<-DOC
 l <- list() 
 l[[1]] <- 2 
 l[[2]] <- 4 
 return(l)
 DOC
-output = run_r_script(test_script)
+output = run_r_script(test_script, "l")
 
 
-
-# Pulling an R vector succeeds 
-test_script = <<-DOC
-l <- c("hi", "there")
-return(l)
-DOC
-output = run_r_script(test_script)
-
-
-# NOTE: don't forget to change the variable name in the script <<-DOC etc etc
 ```
 
 

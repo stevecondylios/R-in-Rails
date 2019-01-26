@@ -2,6 +2,8 @@
 #
 # Example R code to install packages if not already installed
 #
+# This code is from:
+# https://elements.heroku.com/buildpacks/dpmccabe/heroku-buildpack-r
 
 my_packages <- c("dplyr")
 
