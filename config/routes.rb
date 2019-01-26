@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
 
 
-root 'vegetables#index'
+root 'lamborghinis#index'
 
 
 
