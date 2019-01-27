@@ -12,7 +12,7 @@ Add `gem 'rootapp-rinruby'` to the gemfile and `bundle install`
 Note: `rootapp-rinruby` is a more recent fork of `rinruby`
 
 
-Create a Lamborghini model (with name and weight fields), and lamborghinis controller
+Create a Lamborghini model (with name, price and year fields), and lamborghinis controller
 
 ```bash
 rails g model Lamborghini name:string price:decimal year:integer
@@ -26,13 +26,7 @@ rake db:create
 rake db:migrate
 ```
 
-Now go into the rails console..
-
-```bash
-rails c
-```
-
-..and create some entries to the table in the database
+Now go into the rails console with `rails c` and create some entries to the table in the database
 
 ```ruby
 @lamborghini = Lamborghini.new(name: "Lamborghini Veneno Roadster", price: 5000000, year: 2014)
@@ -165,7 +159,7 @@ task :lambo => :environment do
 end
 ```
 
-Now it can be run any time with `rake example_usage` locally or `heroku run rake example_usage` on heroku.
+Now it can be run any time with `rake lambo` locally or `heroku run rake lambo` on heroku.
 
 
 
