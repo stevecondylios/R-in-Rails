@@ -37,18 +37,6 @@
 
 require 'rinruby'
 
-def run_r_script(script, object_to_return)
-
-    r =  RinRuby.new # establishes a new RinRuby connection
-    r.eval(script)
-    return r.pull object_to_return.to_s # Be sure to return the object assigned in R script
-    r.quit
-    r = RinRuby.new(false)
-
-end
-
-
-
 r = RinRuby.new
 
 
