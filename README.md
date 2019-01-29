@@ -410,11 +410,40 @@ end
 
 
 
+
+```
+
+Call `transport_dataframe` and see that the data from the rails database is now accessible to the R environment
+
+```ruby
+
 r.eval transport_dataframe("lambo", "Lamborghini", r)
 
 
+#   id                              name   price year              created_at
+# 1  1       Lamborghini Veneno Roadster 5000000 2014 2019-01-29 17:55:51 UTC
+# 2  2                Lamborghini Veneno 4500000 2013 2019-01-29 17:55:51 UTC
+# 3  3 Lamborghini Sesto Element Concept 3000000 2010 2019-01-29 17:55:51 UTC
+# 4  4          Lamborghini Cala Concept 3000000 1995 2019-01-29 17:56:20 UTC
+# 5  5       Lamborghini Egoista Concept 3000000 2013 2019-01-29 17:56:20 UTC
+# 6  6         Lamborghini Miura Concept 3000000 2006 2019-01-29 17:56:20 UTC
+#                updated_at
+# 1 2019-01-29 17:55:51 UTC
+# 2 2019-01-29 17:55:51 UTC
+# 3 2019-01-29 17:55:51 UTC
+# 4 2019-01-29 17:56:20 UTC
+# 5 2019-01-29 17:56:20 UTC
+# 6 2019-01-29 17:56:20 UTC
+
 
 ```
+
+
+
+
+
+
+
 
 
 ## Congratulations! - you can now harness the power of statistical programming language R in a production Ruby on Rails web application!
