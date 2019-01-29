@@ -326,7 +326,7 @@ def transport_column(r_var_name, array)
   if most_prevalent_data_type_in_first_100_elements == String
     array_2 = array.map{ |e| e.nil? ? "NA" : e }.to_s.gsub('"NA"', "NA_character_")[1..-2]
     content = 'c(' + array_2 + ')'
-	end
+  end
 
   if most_prevalent_data_type_in_first_100_elements == Integer
     array_2 = array.map { |e| e ? e : "NA" }
@@ -418,6 +418,30 @@ r.eval transport_dataframe("lambo", "Lamborghini", r)
 
 
 ## Congratulations! - you can now harness the power of statistical programming language R in a production Ruby on Rails web application!
+
+
+More to come...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Data sourced from [here](https://successstory.com/spendit/most-expensive-lamborghini-cars)
