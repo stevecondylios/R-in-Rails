@@ -323,12 +323,12 @@ def transport_column(r_var_name, array)
   sample = array.length < 100 ? array.length : 100 
   most_prevalent_data_type_in_first_100_elements = array[0..sample].group_by(&:class).max_by{|k, v| v.length}.first
 
-	if most_prevalent_data_type_in_first_100_elements == String
-	  array_2 = array.map{ |e| e.nil? ? "NA" : e }.to_s.gsub('"NA"', "NA_character_")[1..-2]
+  if most_prevalent_data_type_in_first_100_elements == String
+    array_2 = array.map{ |e| e.nil? ? "NA" : e }.to_s.gsub('"NA"', "NA_character_")[1..-2]
     content = 'c(' + array_2 + ')'
 	end
 
-	if most_prevalent_data_type_in_first_100_elements == Integer
+  if most_prevalent_data_type_in_first_100_elements == Integer
     array_2 = array.map { |e| e ? e : "NA" }
     content = 'c(' + array_2.join(', ') + ')'
   end
@@ -357,6 +357,7 @@ def transport_column(r_var_name, array)
   output
 
 end
+
 
 
 # Example usage
