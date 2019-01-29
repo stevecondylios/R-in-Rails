@@ -144,22 +144,24 @@ end
 
 
 
-### Moving this code into a rake task 
+### Tidying this code into a single rake task 
 
-All of the above code can be placed into a single task by creating a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the next two code chunks:
+All of the above code can be placed into a single task. Create a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the next two code chunks:
 
 ```ruby 
 desc "This task creates uses R to create data and rails to insert 3 rows into the database - this task can be called manually but can also be scheduled using heroku scheduler"
 task :lambo => :environment do
 
 
-# code goes here - see tasks/scheduler.rake for what it should look like
+# code goes here 
+
+#see tasks/scheduler.rake for what it should look like
 
 
 end
 ```
 
-Now it can be run any time with `rake lambo` locally or `heroku run rake lambo` on heroku.
+Now it can be run any time with `rake lambo` locally or `heroku run rake lambo` on heroku once the app is deployed.
 
 
 
@@ -247,6 +249,8 @@ The app should now be available at the heroku url
 
 ### Further notes
 
+#### What R objects can be pulled?
+
 Only R vectors can be pulled; an R list cannot be pulled. See documentation [here](https://dahl.byu.edu/software/rinruby/documentation.html)
 
 i.e. R vectors can be pulled:
@@ -274,7 +278,160 @@ output
 ```
 
 
+#### Usage notes
+
+```ruby
+
+require 'rinruby'
+r = RinRuby.new
+
+
+r.eval "2 * 2"
+# [4]
+
+
+a = 2
+r.eval "#{a} * 2"
+# [4]
+```
+
+
+We can get data from the database to the R interpreter like so
+
+
+```ruby
+years = Lamborghini.pluck(:year)
+r.eval "var <- c(#{years.join(', ')}); print(var)" 
+[1] 2014 2013 2010 1995 2013 2006
+
+
+names = Lamborghini.pluck(:name)
+r.eval "va"
+
+
+
+```
+
+
+
+But it will make life easier to have a method that transports the rails table column into R as a vector
+
+```ruby
+
+def transport_column(r_var_name, array) 
+
+  sample = array.length < 100 ? array.length : 100 
+  most_prevalent_data_type_in_first_100_elements = array[0..sample].group_by(&:class).max_by{|k, v| v.length}.first
+
+	if most_prevalent_data_type_in_first_100_elements == String
+	  array_2 = array.map{ |e| e.nil? ? "NA" : e }.to_s.gsub('"NA"', "NA_character_")[1..-2]
+    content = 'c(' + array_2 + ')'
+	end
+
+	if most_prevalent_data_type_in_first_100_elements == Integer
+    array_2 = array.map { |e| e ? e : "NA" }
+    content = 'c(' + array_2.join(', ') + ')'
+  end
+
+  if most_prevalent_data_type_in_first_100_elements == Float 
+    array_2 = array.map { |e| e ? e : "NA" }
+    content = 'c(' + array_2.join(', ') + ')'
+  end
+
+  if most_prevalent_data_type_in_first_100_elements == ActiveSupport::TimeWithZone 
+    array_2 = array.map{ |e| e.nil? ? "NA" : e }.map { |e| e.to_s }.to_s.gsub('"NA"', "NA_character_")[1..-2]
+    content = 'c(' + array_2 + ')'
+  end
+
+  if most_prevalent_data_type_in_first_100_elements == BigDecimal 
+    array = array.map { |e| e.nil? ? "NA" : e }.to_s.gsub('"', "")[1..-2]
+    content = 'c(' + array + ')'
+  end 
+
+  output = r_var_name.to_s + " <- " + content
+
+  # Print, just to confirm
+
+  output = output + "; print(" + r_var_name.to_s + ")"
+
+  output
+
+end
+
+
+
+# Example usage
+
+years = Lamborghini.order(:id).pluck(:year)
+r.eval transport_column("years", years)
+# [1] 2014 2013 2010 1995 2013 2006
+
+
+names = Lamborghini.order(:id).pluck(:name)
+r.eval transport_column("names", names)
+# [1] "Lamborghini Veneno Roadster"       "Lamborghini Veneno"               
+# [3] "Lamborghini Sesto Element Concept" "Lamborghini Cala Concept"         
+# [5] "Lamborghini Egoista Concept"       "Lamborghini Miura Concept" 
+
+
+some_floats = [12.234, 213.2345, 0.000234]
+r.eval transport_column("some_floats", some_floats)
+# [1]  12.234000 213.234500   0.000234
+
+```
+
+Or perhaps more useful still, a method that transports an entire rails table into R as an R dataframe
+
+
+```ruby
+
+
+def transport_dataframe(r_dataframe_name, model, connection)
+
+  r = connection
+
+  array_of_arrays = eval(model).column_names.map { |column| eval(model).all.order(:id).map(&column.to_sym) }
+  # Note: .order(:id) means that if attributes have been edited and the ids are out of order, it will return data in correct orders
+
+  column_names = eval(model).column_names
+
+  # Transport each column to R interpreter
+  array_of_arrays.each_with_index do |column, index|
+    puts index
+    r.eval transport_column(column_names[index], column) 
+  end
+
+  # Now create an R dataframe from the columns 
+  output = r_dataframe_name.to_s + " <- data.frame(" + column_names.join(', ') + ", stringsAsFactors=FALSE); print(" + r_dataframe_name + ")"
+
+  output
+
+end
+
+
+
+r.eval transport_dataframe("lambo", "Lamborghini", r)
+
+
+
+```
+
+
+## Congratulations! - you can now harness the power of statistical programming language R in a production Ruby on Rails web application!
+
+
 Data sourced from [here](https://successstory.com/spendit/most-expensive-lamborghini-cars)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
