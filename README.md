@@ -359,7 +359,6 @@ def transport_column(r_var_name, array)
 end
 
 
-
 # Example usage
 
 years = Lamborghini.order(:id).pluck(:year)
