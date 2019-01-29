@@ -280,6 +280,8 @@ output
 
 #### Usage notes
 
+The following demonstrates (very simply) how to generate and execute R scripts using ruby
+
 ```ruby
 
 require 'rinruby'
