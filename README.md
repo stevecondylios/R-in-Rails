@@ -342,7 +342,7 @@ def transport_column(r_var_name, array)
 
   if most_prevalent_data_type_in_first_100_elements == ActiveSupport::TimeWithZone 
     array_2 = array.map{ |e| e.nil? ? "NA" : e }.map { |e| e.to_s }.to_s.gsub('"NA"', "NA_character_")[1..-2]
-    content = 'c(' + array_2 + ')'
+    content = 'as.POSIXct(c(' + array_2 + '))'
   end
 
   if most_prevalent_data_type_in_first_100_elements == BigDecimal 
