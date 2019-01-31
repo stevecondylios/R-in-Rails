@@ -149,7 +149,7 @@ end
 All of the above code can be placed into a single task. Create a file in `/tasks` called `scheduler.rake`, and wrapping all the above code between the next two code chunks:
 
 ```ruby 
-desc "This task creates uses R to create data and rails to insert 3 rows into the database - this task can be called manually but can also be scheduled using heroku scheduler"
+desc "This task does some mathematical operations in R and moves the resulting data into a rails database. This task can be called manually but can also be scheduled using heroku scheduler"
 task :lambo => :environment do
 
 
@@ -415,7 +415,7 @@ end
 
 ```
 
-Call `transport_dataframe` and see that the data from the rails database is now accessible to the R environment
+Call `transport_dataframe(r_dataframe_name, model, connection)` and see that the data from the rails database is now accessible to the R environment!
 
 ```ruby
 
