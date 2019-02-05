@@ -1,16 +1,21 @@
 require 'rails_helper'
+require 'rinruby'
+
+
+
+
 
 RSpec.describe Lamborghini, type: :model do
 
   context 'column tests - data types' do
 
 
+    let(:r) {RinRuby.new}
+
 
 
     it 'ensures transport_column converts ActiveSupport::TimeZone (ruby) to POSIXct (R)' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_dates = ["2019-02-23", "1981-01-04", "2020-12-31"]
       dates = some_dates.map{ |e| ActiveSupport::TimeZone['UTC'].parse(e) }  
@@ -28,8 +33,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column converts Integer (ruby) to integer (R)' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_integers = [1,2,3,4]
       r.eval Transport.transport_column("some_integers", some_integers)
@@ -45,8 +48,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column converts String (ruby) to character (R)' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_strings = ["hello", "world", "123"]
       r.eval Transport.transport_column("some_strings", some_strings)
@@ -63,8 +64,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column converts BigDecimal (ruby) to numeric (R)' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_BigDecimals = [0.123, 1.456, 4839.009384].map { |e| e.to_d }
       r.eval Transport.transport_column("some_BigDecimals", some_BigDecimals)
@@ -82,8 +81,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column converts Float (ruby) to numeric (R)' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_floats = [0.123, 1.456, 4839.009384]
       r.eval Transport.transport_column("some_floats", some_floats)
@@ -100,8 +97,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column converts TrueClass and FalseClass (ruby) to logical (R)' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_TrueClass_and_FlaseClass = [true, false, false, true]
       r.eval Transport.transport_column("some_TrueClass_and_FlaseClass", some_TrueClass_and_FlaseClass)
@@ -118,8 +113,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column can handle an entire column of nil values' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       all_nils = [nil, nil, nil, nil]
       r.eval Transport.transport_column("all_nils", all_nils)
@@ -146,13 +139,11 @@ RSpec.describe Lamborghini, type: :model do
 
 
 
-
+    let(:r) {RinRuby.new}
 
 
     it 'ensures transport_column handles nil in ActiveSupport::TimeZone' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_dates = [nil, "1981-01-04", "2020-12-31"]
       dates = some_dates.map{ |e| e.nil? ? nil : ActiveSupport::TimeZone['UTC'].parse(e) }  
@@ -170,8 +161,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column handles nil in Integer' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_integers = [nil,2,3,4]
       r.eval Transport.transport_column("some_integers", some_integers)
@@ -187,8 +176,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column handles nil in String' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_strings = [nil, "world", "123"]
       r.eval Transport.transport_column("some_strings", some_strings)
@@ -205,8 +192,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column handles nil in BigDecimal' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_BigDecimals = [nil, 1.456, 4839.009384].map { |e| e.nil? ? nil : e.to_d }
       r.eval Transport.transport_column("some_BigDecimals", some_BigDecimals)
@@ -224,8 +209,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column handles nil in Float' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_floats = [nil, 1.456, 4839.009384]
       r.eval Transport.transport_column("some_floats", some_floats)
@@ -242,8 +225,6 @@ RSpec.describe Lamborghini, type: :model do
 
     it 'ensures transport_column handles nil in TrueClass and FalseClass' do
 
-      require 'rinruby'
-      r = RinRuby.new
 
       some_TrueClass_and_FlaseClass = [nil, false, true, nil]
       r.eval Transport.transport_column("some_TrueClass_and_FlaseClass", some_TrueClass_and_FlaseClass)
@@ -269,6 +250,8 @@ RSpec.describe Lamborghini, type: :model do
   context 'dataframe tests' do
 
 
+    let(:r) {RinRuby.new}
+
     it 'ensures transport_dataframe converts moves an n x m dataframe into R' do
       
       # Insert some data into test db
@@ -280,10 +263,6 @@ RSpec.describe Lamborghini, type: :model do
 
       @lamborghini = Lamborghini.new(name: "Lamborghini Sesto Element Concept", price: 3000000, year: 2010)
       @lamborghini.save
-
-
-      require 'rinruby'
-      r = RinRuby.new
 
       
       r.eval Transport.transport_dataframe("some_dataframe", "Lamborghini", r)
