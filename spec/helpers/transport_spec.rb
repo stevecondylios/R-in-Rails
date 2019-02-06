@@ -5,7 +5,7 @@ require 'rinruby'
 
 
 
-RSpec.describe Lamborghini, type: :model do
+RSpec.describe "transport methods" do
 
   context 'column tests - data types' do
 
