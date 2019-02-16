@@ -8,8 +8,7 @@ Create a rails app
 rails new R-in-Rails --database=postgresql
 ```
 
-Add `gem 'rootapp-rinruby'` to the gemfile and `bundle install`
-Note: `rootapp-rinruby` is a more recent fork of `rinruby`
+Add `gem 'rinruby'` to the gemfile and `bundle install`
 
 
 Create a Lamborghini model (with name, price and year fields), and lamborghinis controller
@@ -186,17 +185,19 @@ To deploy the app to heroku, several things need to be configured. These are:
 
  The buildpacks used:
 
-1. https://github.com/bundler/heroku-buildpack-bundler2
 1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+2. https://github.com/bundler/heroku-buildpack-bundler2
+
 
 Set these with
 ```bash
-heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
 heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
 ```
 
 Confirm they are set correctly with `heroku buildpacks`
 
+Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specific order, but if using `rinruby` gem, they must be in the order specifed above
 
 #### Setting heroku stack
 

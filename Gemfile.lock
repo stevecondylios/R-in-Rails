@@ -142,7 +142,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     regexp_parser (1.3.0)
-    rootapp-rinruby (3.2.0)
+    rinruby (2.1.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.2)
@@ -223,7 +223,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   puma (~> 3.11)
   rails (~> 5.2.2)
-  rootapp-rinruby
+  rinruby
   rspec-rails
   sass-rails (~> 5.0)
   selenium-webdriver
