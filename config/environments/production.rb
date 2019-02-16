@@ -27,16 +27,7 @@ Rails.application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true # Updated from tip here: https://www.standardco.de/running-r-scripts-on-heroku-in-a-rails-app
-  # Otherwise rinruby will not work on heroku, and will return error like next 6 lines:
-
-#    remote:  !
-# remote:  !     Could not detect rake tasks
-# remote:  !     ensure you can run `$ bundle exec rake -P` against your app
-# remote:  !     and using the production group of your Gemfile.
-# remote:  !     rake aborted!
-# remote:  !     Errno::ENOENT: No such file or directory - R
-
+  config.assets.compile = false
 
 
 
