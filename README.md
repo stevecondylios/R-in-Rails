@@ -228,7 +228,7 @@ invisible(sapply(my_packages, install_if_missing))
 #### Adding 1 web dyno
 
 
-After `heroku run bundle install`, `heroku pg:create` and `heroku run rake db:migrate`, the app will be ready to use
+After running `heroku run bundle install`, `heroku run pg:create` and `heroku run rake db:migrate`, the app will be ready to use
 
 However, visiting the url may result in an ([H14](https://devcenter.heroku.com/articles/error-codes#h14-no-web-dynos-running)) application error
 
