@@ -175,8 +175,8 @@ Create a new heroku app with `heroku create your_new_app_name`
 
 To deploy the app to heroku, several things need to be configured. These are: 
 * adding the bundler2 buildpack
-* addingthe R buildpack (for heroku-16 stack)
-* setting heroku-16 stack
+* addingthe R buildpack (for cedar-14 stack)
+* setting heroku-cedar-14 stack
 * adding init.R file
 * adding 1 web dyno
 
@@ -185,23 +185,25 @@ To deploy the app to heroku, several things need to be configured. These are:
 
  The buildpacks used:
 
-1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14
 2. https://github.com/bundler/heroku-buildpack-bundler2
+3. https://github.com/mojodna/heroku-buildpack-cairo.git
 
 
 Set these with
 ```bash
-heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14
 heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
+heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git
 ```
 
 Confirm they are set correctly with `heroku buildpacks`
 
-Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specific order, but if using `rinruby` gem, they must be in the order specifed above
+Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specific order, but if using `rinruby` gem, they must be in the order specifed above, since rinruby will try to execute some R, and if it can't (i.e. if R hasn't been istalled, the build will fail)
 
 #### Setting heroku stack
 
-`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16` buildpack requires, `heroku-16`. Set this with `heroku stack:set heroku-16`
+`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14` buildpack requires, `cedar-14`. Set this with `heroku stack:set cedar-14`
 
 
 #### Creating init.R file
