@@ -188,6 +188,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14
 2. https://github.com/bundler/heroku-buildpack-bundler2
 3. https://github.com/mojodna/heroku-buildpack-cairo.git
+4. https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git
 
 
 Set these with
@@ -195,11 +196,12 @@ Set these with
 heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14
 heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
 heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git
+heroku buildpacks:set https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git
 ```
 
 Confirm they are set correctly with `heroku buildpacks`
 
-Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specific order, but if using `rinruby` gem, they must be in the order specifed above, since rinruby will try to execute some R, and if it can't (i.e. if R hasn't been istalled, the build will fail)
+Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specific order, but if using `rinruby` gem (as we are here), you must have the r buildpack installed prior to the ruby buildpack. Good to keep this in mind in case buildpacks need changing later
 
 #### Setting heroku stack
 
