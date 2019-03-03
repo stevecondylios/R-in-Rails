@@ -193,10 +193,10 @@ To deploy the app to heroku, several things need to be configured. These are:
 
 Set these with
 ```bash
-heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14
-heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2
-heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git
-heroku buildpacks:set https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git
+heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14 --index 1
+heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2 --index 2
+heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git --index 3
+heroku buildpacks:set https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git --index 4
 ```
 
 Confirm they are set correctly with `heroku buildpacks`
@@ -359,7 +359,7 @@ end
 
 def transport_column(r_var_name, array)
 
-  most_prevalent_data_type = Transport.determine_class(array)
+  most_prevalent_data_type = determine_class(array)
 
   if most_prevalent_data_type == String
     vector_as_string = array.map{ |e| e.nil? ? "NA" : e }.to_s.gsub('"NA"', "NA_character_")[1..-2]
@@ -442,7 +442,7 @@ def transport_dataframe(r_dataframe_name, model, connection)
   # Transport each column to R interpreter
   array_of_arrays.each_with_index do |column, index|
     puts index
-    r.eval Transport.transport_column(column_names[index], column) 
+    r.eval transport_column(column_names[index], column) 
   end
 
   # Now create an R dataframe from the columns 
