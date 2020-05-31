@@ -187,7 +187,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 
 1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
 2. https://github.com/heroku/heroku-buildpack-ruby.git
-3. https://github.com/mojodna/heroku-buildpack-cairo.git
+3. https://github.com/sky-uk/heroku-buildpack-cairo (which is a fork of previous version adapted to work with `heroku-16`; see [here](https://github.com/mojodna/heroku-buildpack-cairo/issues/16#issuecomment-391769918))
 4. https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git
 
 
@@ -195,7 +195,7 @@ Set these with
 ```bash
 heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16 --index 1
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby.git --index 2
-heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git --index 3
+heroku buildpacks:set https://github.com/sky-uk/heroku-buildpack-cairo --index 3
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git --index 4
 ```
 
