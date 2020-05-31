@@ -175,8 +175,8 @@ Create a new heroku app with `heroku create your_new_app_name`
 
 To deploy the app to heroku, several things need to be configured. These are: 
 * adding the ruby buildpack
-* addingthe R buildpack (for the [herkou-16 stack](https://elements.heroku.com/buildpacks/dpmccabe/heroku-buildpack-r))
-* setting heroku-16 stack
+* addingthe R buildpack (for the [heroku-16 stack](https://elements.heroku.com/buildpacks/dpmccabe/heroku-buildpack-r))
+* setting heroku-16 stack (if required - Heroku defaults to the latest stack so we only need set it if not using a buildpack compatible with the latest stack)
 * adding init.R file
 * adding 1 web dyno
 
@@ -185,7 +185,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 
  The buildpacks used:
 
-1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git (see [here](https://github.com/virtualstaticvoid/heroku-buildpack-r/tree/master) for info on the latest R buildpack)
 2. https://github.com/heroku/heroku-buildpack-ruby.git
 3. https://github.com/sky-uk/heroku-buildpack-cairo (which is a fork of previous version adapted to work with `heroku-16`; see [here](https://github.com/mojodna/heroku-buildpack-cairo/issues/16#issuecomment-391769918))
 4. https://github.com/heroku/heroku-buildpack-google-chrome.git (updated version of chrome buildpack, see [here](https://devcenter.heroku.com/articles/heroku-ci#known-issues))
@@ -193,7 +193,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 
 Set these with
 ```bash
-heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16 --index 1
+heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git --index 1
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby.git --index 2
 heroku buildpacks:set https://github.com/sky-uk/heroku-buildpack-cairo --index 3
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-google-chrome.git --index 4
@@ -205,7 +205,7 @@ Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specif
 
 #### Setting heroku stack
 
-`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16` buildpack requires, `heroku-16`. Set this with `heroku stack:set heroku-16`
+`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16` buildpack requires, `heroku-16`. Set this with `heroku stack:set heroku-16` *if* using that buildpack. Since we're not (anymore), no need to do it, but we may need to in the future so this section remains here for reference.
 
 
 #### Creating init.R file
