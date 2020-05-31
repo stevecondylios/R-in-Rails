@@ -174,7 +174,7 @@ Create a new heroku app with `heroku create your_new_app_name`
 
 
 To deploy the app to heroku, several things need to be configured. These are: 
-* adding the bundler2 buildpack
+* adding the ruby buildpack
 * addingthe R buildpack (for the [herkou-16 stack](https://elements.heroku.com/buildpacks/dpmccabe/heroku-buildpack-r))
 * setting heroku-16 stack
 * adding init.R file
@@ -186,7 +186,7 @@ To deploy the app to heroku, several things need to be configured. These are:
  The buildpacks used:
 
 1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
-2. https://github.com/bundler/heroku-buildpack-bundler2
+2. https://github.com/heroku/heroku-buildpack-ruby.git
 3. https://github.com/mojodna/heroku-buildpack-cairo.git
 4. https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git
 
@@ -194,7 +194,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 Set these with
 ```bash
 heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16 --index 1
-heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2 --index 2
+heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby.git --index 2
 heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git --index 3
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git --index 4
 ```
