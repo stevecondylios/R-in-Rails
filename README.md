@@ -175,8 +175,8 @@ Create a new heroku app with `heroku create your_new_app_name`
 
 To deploy the app to heroku, several things need to be configured. These are: 
 * adding the bundler2 buildpack
-* addingthe R buildpack (for cedar-14 stack)
-* setting heroku-cedar-14 stack
+* addingthe R buildpack (for the [herkou-16 stack](https://elements.heroku.com/buildpacks/dpmccabe/heroku-buildpack-r))
+* setting heroku-16 stack
 * adding init.R file
 * adding 1 web dyno
 
@@ -185,7 +185,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 
  The buildpacks used:
 
-1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14
+1. https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
 2. https://github.com/bundler/heroku-buildpack-bundler2
 3. https://github.com/mojodna/heroku-buildpack-cairo.git
 4. https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git
@@ -193,7 +193,7 @@ To deploy the app to heroku, several things need to be configured. These are:
 
 Set these with
 ```bash
-heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14 --index 1
+heroku buildpacks:set https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16 --index 1
 heroku buildpacks:set https://github.com/bundler/heroku-buildpack-bundler2 --index 2
 heroku buildpacks:set https://github.com/mojodna/heroku-buildpack-cairo.git --index 3
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-xvfb-google-chrome.git --index 4
@@ -205,7 +205,7 @@ Note: if using `rootapp-rinruby`, the buildpacks do not have to go in any specif
 
 #### Setting heroku stack
 
-`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#cedar-14` buildpack requires, `cedar-14`. Set this with `heroku stack:set cedar-14`
+`heroku stack` defaults to `heroku-18`, but the `https://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16` buildpack requires, `heroku-16`. Set this with `heroku stack:set heroku-16`
 
 
 #### Creating init.R file
